@@ -26,6 +26,8 @@ namespace Tic_Tac_Toe.Controllers
             _mapper = mapper;
         }
 
+        // Endpoint 1: Creates two new players and adds them to a game
+        //             Returns ID of both players and game
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -38,11 +40,8 @@ namespace Tic_Tac_Toe.Controllers
                 return BadRequest(ModelState);
             }
 
-            var player1DTO = new CreatePlayerDTO();
-            var player2DTO = new CreatePlayerDTO();
-
-            player1DTO.Name = playersDTO.Player1Name;
-            player2DTO.Name = playersDTO.Player2Name;
+            var player1DTO = new CreatePlayerDTO { Name = playersDTO.Player1Name };
+            var player2DTO = new CreatePlayerDTO { Name = playersDTO.Player2Name };
 
             var player1 = _mapper.Map<Player>(player1DTO);
             var player2 = _mapper.Map<Player>(player2DTO);
@@ -56,11 +55,14 @@ namespace Tic_Tac_Toe.Controllers
             await _unitOfWork.Players.InsertRange(playersToAdd);
             await _unitOfWork.Save();
 
-            var gameDTO = new CreateGameDTO();
-            gameDTO.Player1Id = player1.PlayerId;
-            gameDTO.Player2Id = player2.PlayerId;
+            var gameDTO = new CreateGameDTO 
+            { 
+                Player1Id = player1.PlayerId, 
+                Player2Id = player2.PlayerId 
+            };
 
             var game = _mapper.Map<Game>(gameDTO);
+
             await _unitOfWork.Games.Insert(game);
             await _unitOfWork.Save();
 

@@ -14,7 +14,10 @@ namespace Tic_Tac_Toe.Data
         [Required]
         public int NumberOfMoves { get; set; }
 
-        // -1: Incomplete, 0: Draw, 1: Player 1 Won, 2: Player 2 Won
+        // -1: Incomplete
+        //  0: Draw
+        //  1: Player 1 Won
+        //  2: Player 2 Won
         [Required]
         public int Status { get; set; } 
 
