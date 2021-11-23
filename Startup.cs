@@ -1,19 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Tic_Tac_Toe.Configurations;
 using Tic_Tac_Toe.Data;
+using Tic_Tac_Toe.IRepository;
+using Tic_Tac_Toe.Repository;
 
 namespace Tic_Tac_Toe
 {
@@ -34,7 +29,6 @@ namespace Tic_Tac_Toe
                 options.UseSqlServer(Configuration.GetConnectionString("sqlConnection"));
             });
             
-
             services.AddControllers();
 
             services.AddCors(o =>
@@ -46,6 +40,11 @@ namespace Tic_Tac_Toe
             });
 
             services.AddAutoMapper(typeof(MappingProfile));
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddControllers().AddNewtonsoftJson(op =>
+                op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddSwaggerGen(c =>
             {
