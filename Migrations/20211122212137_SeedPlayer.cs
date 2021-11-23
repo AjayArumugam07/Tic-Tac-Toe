@@ -2,7 +2,7 @@
 
 namespace Tic_Tac_Toe.Migrations
 {
-    public partial class InitialCreation : Migration
+    public partial class SeedPlayer : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace Tic_Tac_Toe.Migrations
                 {
                     PlayerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,21 +27,21 @@ namespace Tic_Tac_Toe.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NumberOfMoves = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    Player1PlayerId = table.Column<int>(type: "int", nullable: true),
-                    Player2PlayerId = table.Column<int>(type: "int", nullable: true)
+                    Player1Id = table.Column<int>(type: "int", nullable: true),
+                    Player2Id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Games", x => x.GameId);
                     table.ForeignKey(
-                        name: "FK_Games_Players_Player1PlayerId",
-                        column: x => x.Player1PlayerId,
+                        name: "FK_Games_Players_Player1Id",
+                        column: x => x.Player1Id,
                         principalTable: "Players",
                         principalColumn: "PlayerId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Games_Players_Player2PlayerId",
-                        column: x => x.Player2PlayerId,
+                        name: "FK_Games_Players_Player2Id",
+                        column: x => x.Player2Id,
                         principalTable: "Players",
                         principalColumn: "PlayerId",
                         onDelete: ReferentialAction.Restrict);
@@ -56,7 +56,7 @@ namespace Tic_Tac_Toe.Migrations
                     XCoordinate = table.Column<int>(type: "int", nullable: false),
                     YCoordinate = table.Column<int>(type: "int", nullable: false),
                     PlayerId = table.Column<int>(type: "int", nullable: false),
-                    GameId = table.Column<int>(type: "int", nullable: true)
+                    GameId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,7 +66,7 @@ namespace Tic_Tac_Toe.Migrations
                         column: x => x.GameId,
                         principalTable: "Games",
                         principalColumn: "GameId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Moves_Players_PlayerId",
                         column: x => x.PlayerId,
@@ -75,15 +75,40 @@ namespace Tic_Tac_Toe.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Games_Player1PlayerId",
+            migrationBuilder.InsertData(
+                table: "Players",
+                columns: new[] { "PlayerId", "Name" },
+                values: new object[] { 1, "Ajay" });
+
+            migrationBuilder.InsertData(
+                table: "Players",
+                columns: new[] { "PlayerId", "Name" },
+                values: new object[] { 2, "Tom" });
+
+            migrationBuilder.InsertData(
                 table: "Games",
-                column: "Player1PlayerId");
+                columns: new[] { "GameId", "NumberOfMoves", "Player1Id", "Player2Id", "Status" },
+                values: new object[] { 1, 2, 1, 2, -1 });
+
+            migrationBuilder.InsertData(
+                table: "Moves",
+                columns: new[] { "MoveId", "GameId", "PlayerId", "XCoordinate", "YCoordinate" },
+                values: new object[] { 1, 1, 1, 0, 0 });
+
+            migrationBuilder.InsertData(
+                table: "Moves",
+                columns: new[] { "MoveId", "GameId", "PlayerId", "XCoordinate", "YCoordinate" },
+                values: new object[] { 2, 1, 2, 1, 2 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_Player2PlayerId",
+                name: "IX_Games_Player1Id",
                 table: "Games",
-                column: "Player2PlayerId");
+                column: "Player1Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_Player2Id",
+                table: "Games",
+                column: "Player2Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Moves_GameId",

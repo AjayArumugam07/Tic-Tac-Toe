@@ -10,8 +10,8 @@ using TicTacToe.Data;
 namespace Tic_Tac_Toe.Migrations
 {
     [DbContext(typeof(GamesDBContext))]
-    [Migration("20211122195058_InitialCreation")]
-    partial class InitialCreation
+    [Migration("20211122212137_SeedPlayer")]
+    partial class SeedPlayer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,10 +31,10 @@ namespace Tic_Tac_Toe.Migrations
                     b.Property<int>("NumberOfMoves")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Player1PlayerId")
+                    b.Property<int?>("Player1Id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Player2PlayerId")
+                    b.Property<int?>("Player2Id")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -42,11 +42,21 @@ namespace Tic_Tac_Toe.Migrations
 
                     b.HasKey("GameId");
 
-                    b.HasIndex("Player1PlayerId");
+                    b.HasIndex("Player1Id");
 
-                    b.HasIndex("Player2PlayerId");
+                    b.HasIndex("Player2Id");
 
                     b.ToTable("Games");
+
+                    b.HasData(
+                        new
+                        {
+                            GameId = 1,
+                            NumberOfMoves = 2,
+                            Player1Id = 1,
+                            Player2Id = 2,
+                            Status = -1
+                        });
                 });
 
             modelBuilder.Entity("TicTacToe.Data.Move", b =>
@@ -56,7 +66,7 @@ namespace Tic_Tac_Toe.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("GameId")
+                    b.Property<int>("GameId")
                         .HasColumnType("int");
 
                     b.Property<int>("PlayerId")
@@ -75,6 +85,24 @@ namespace Tic_Tac_Toe.Migrations
                     b.HasIndex("PlayerId");
 
                     b.ToTable("Moves");
+
+                    b.HasData(
+                        new
+                        {
+                            MoveId = 1,
+                            GameId = 1,
+                            PlayerId = 1,
+                            XCoordinate = 0,
+                            YCoordinate = 0
+                        },
+                        new
+                        {
+                            MoveId = 2,
+                            GameId = 1,
+                            PlayerId = 2,
+                            XCoordinate = 1,
+                            YCoordinate = 2
+                        });
                 });
 
             modelBuilder.Entity("TicTacToe.Data.Player", b =>
@@ -86,23 +114,35 @@ namespace Tic_Tac_Toe.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("PlayerId");
 
                     b.ToTable("Players");
+
+                    b.HasData(
+                        new
+                        {
+                            PlayerId = 1,
+                            Name = "Ajay"
+                        },
+                        new
+                        {
+                            PlayerId = 2,
+                            Name = "Tom"
+                        });
                 });
 
             modelBuilder.Entity("TicTacToe.Data.Game", b =>
                 {
                     b.HasOne("TicTacToe.Data.Player", "Player1")
                         .WithMany("Player1Games")
-                        .HasForeignKey("Player1PlayerId");
+                        .HasForeignKey("Player1Id");
 
                     b.HasOne("TicTacToe.Data.Player", "Player2")
                         .WithMany("Player2Games")
-                        .HasForeignKey("Player2PlayerId");
+                        .HasForeignKey("Player2Id");
 
                     b.Navigation("Player1");
 
@@ -111,15 +151,19 @@ namespace Tic_Tac_Toe.Migrations
 
             modelBuilder.Entity("TicTacToe.Data.Move", b =>
                 {
-                    b.HasOne("TicTacToe.Data.Game", null)
+                    b.HasOne("TicTacToe.Data.Game", "Game")
                         .WithMany("Moves")
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TicTacToe.Data.Player", "Player")
                         .WithMany()
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Game");
 
                     b.Navigation("Player");
                 });
