@@ -6,16 +6,25 @@ namespace Tic_Tac_Toe.Models
 {
     public class CreateGameDTO
     {
-        [Required]
-        public int NumberOfMoves { get; set; }
 
-        // -1: Incomplete, 0: Draw, 1: Player 1 Won, 2: Player 2 Won
-        [Required]
+        // -1: Incomplete
+        //  0: Draw
+        //  1: Player 1 Won
+        //  2: Player 2 Won
+        [Range(-1, 2)]
         public int Status { get; set; }
 
-        public int? Player1Id { get; set; }
+        public int Player1Id { get; set; }
 
-        public int? Player2Id { get; set; }
+        public int Player2Id { get; set; }
+
+        public int NumberOfMoves { get; set; }
+
+        public CreateGameDTO()
+        {
+            Status = -1;
+            NumberOfMoves = 0;
+        }
     }
 
     public class GameDTO : CreateGameDTO

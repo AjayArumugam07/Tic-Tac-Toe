@@ -14,6 +14,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tic_Tac_Toe.Configurations;
 using Tic_Tac_Toe.Data;
+using Tic_Tac_Toe.IRepository;
+using Tic_Tac_Toe.Repository;
 
 namespace Tic_Tac_Toe
 {
@@ -46,6 +48,11 @@ namespace Tic_Tac_Toe
             });
 
             services.AddAutoMapper(typeof(MappingProfile));
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddControllers().AddNewtonsoftJson(op =>
+                op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddSwaggerGen(c =>
             {
