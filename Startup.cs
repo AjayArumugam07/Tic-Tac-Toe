@@ -12,7 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TicTacToe.Data;
+using Tic_Tac_Toe.Configurations;
+using Tic_Tac_Toe.Data;
 
 namespace Tic_Tac_Toe
 {
@@ -43,6 +44,8 @@ namespace Tic_Tac_Toe
                            .AllowAnyMethod()
                            .AllowAnyHeader());
             });
+
+            services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddSwaggerGen(c =>
             {
