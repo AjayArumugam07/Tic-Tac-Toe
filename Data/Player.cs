@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-namespace TicTacToe.Data
+namespace Tic_Tac_Toe.Data
 {
     public class Player
     {
@@ -12,7 +12,7 @@ namespace TicTacToe.Data
         public int PlayerId { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(50)]
         public string Name { get; set; }
 
         [InverseProperty("Player1")]

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tic_Tac_Toe.Data;
 
 namespace Tic_Tac_Toe.Migrations
 {
     [DbContext(typeof(GamesDBContext))]
-    partial class GamesDBContextModelSnapshot : ModelSnapshot
+    [Migration("20211122212137_SeedPlayer")]
+    partial class SeedPlayer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
