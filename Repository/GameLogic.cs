@@ -109,7 +109,7 @@ namespace Tic_Tac_Toe.Repository
             return game.Status == (int) GameStatus.INCOMPLETE ? false : true;
         }
 
-        public static List<string> CreateBoardRepresentation(int[,] boardMatrix)
+        public static List<string> CreateBoardStringRepresentation(int[,] boardMatrix)
         {
             return new List<string>
             {

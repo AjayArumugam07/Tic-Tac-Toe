@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Tic_Tac_Toe.Data;
 using Tic_Tac_Toe.IRepository;
@@ -29,7 +27,7 @@ namespace Tic_Tac_Toe.Controllers
             _mapper = mapper;
         }
 
-        // Endpoint 2: Processes a Move
+        // Endpoint 2: Processes a Move and Update Game Status
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,7 +69,7 @@ namespace Tic_Tac_Toe.Controllers
                 return BadRequest(responseMessage);
             }
 
-            // Player's Move is now valid
+            // Player's Move is valid beyond this point
             game.NumberOfMoves++;
             _unitOfWork.Games.Update(game);
 
@@ -81,10 +79,11 @@ namespace Tic_Tac_Toe.Controllers
             board[currentMove.RowNumber, currentMove.ColumnNumber] =
                     currentMove.PlayerId == game.Player1Id ? 1 : 2;
 
-            GameStatus gameStatus = CheckGameStatus(currentMove, game, board);
-
             string message = "";
             string player = currentMove.PlayerId == game.Player1Id ? "Player 1" : "Player 2";
+
+            GameStatus gameStatus = CheckGameStatus(currentMove, game, board);
+
             switch (gameStatus)
             {
                 case GameStatus.INCOMPLETE:
@@ -106,7 +105,7 @@ namespace Tic_Tac_Toe.Controllers
 
             await _unitOfWork.Save();
 
-            List<string> boardStringRepresentation = CreateBoardRepresentation(board);
+            List<string> boardStringRepresentation = CreateBoardStringRepresentation(board);
 
             var responseObject = new
             {
@@ -117,7 +116,6 @@ namespace Tic_Tac_Toe.Controllers
             };
 
             return Created("Move", responseObject);
-
         }
     }
 }
