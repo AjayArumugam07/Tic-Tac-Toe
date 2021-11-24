@@ -9,6 +9,8 @@ namespace Tic_Tac_Toe.IRepository
         IGenericRepository<Game> Games { get; }
         IGenericRepository<Move> Moves { get; }
         IGenericRepository<Player> Players { get; }
+
+        // Saves the current state of Database
         Task Save();
     }
 }

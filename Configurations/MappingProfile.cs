@@ -10,6 +10,7 @@ namespace Tic_Tac_Toe.Configurations
         {
             CreateMap<Game, GameDTO>().ReverseMap();
             CreateMap<Game, CreateGameDTO>().ReverseMap();
+            CreateMap<Game, ActiveGamesDTO>().ReverseMap();
             CreateMap<Player, PlayerDTO>().ReverseMap();
             CreateMap<Player, CreatePlayerDTO>().ReverseMap();
             CreateMap<Move, MoveDTO>().ReverseMap();

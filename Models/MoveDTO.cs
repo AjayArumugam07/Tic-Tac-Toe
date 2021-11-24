@@ -8,14 +8,15 @@ namespace Tic_Tac_Toe.Models
     public class CreateMoveDTO
     {
         [Required]
-        public int XCoordinate { get; set; }
+        [Range(0, 2)]
+        public int RowNumber { get; set; }
 
         [Required]
-        public int YCoordinate { get; set; }
+        [Range(0, 2)]
+        public int ColumnNumber { get; set; }
 
+        [Required]
         public int PlayerId { get; set; }
-
-        public int GameId { get; set; }
     }
 
     public class MoveDTO : CreateMoveDTO
@@ -23,6 +24,8 @@ namespace Tic_Tac_Toe.Models
         public int MoveId { get; set; }
 
         public Player Player { get; set; }
+
+        public int GameId { get; set; }
 
         public Game Game { get; set; }
     }

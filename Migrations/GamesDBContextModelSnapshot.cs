@@ -19,7 +19,7 @@ namespace Tic_Tac_Toe.Migrations
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TicTacToe.Data.Game", b =>
+            modelBuilder.Entity("Tic_Tac_Toe.Data.Game", b =>
                 {
                     b.Property<int>("GameId")
                         .ValueGeneratedOnAdd()
@@ -57,12 +57,15 @@ namespace Tic_Tac_Toe.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TicTacToe.Data.Move", b =>
+            modelBuilder.Entity("Tic_Tac_Toe.Data.Move", b =>
                 {
                     b.Property<int>("MoveId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ColumnNumber")
+                        .HasColumnType("int");
 
                     b.Property<int>("GameId")
                         .HasColumnType("int");
@@ -70,10 +73,7 @@ namespace Tic_Tac_Toe.Migrations
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("XCoordinate")
-                        .HasColumnType("int");
-
-                    b.Property<int>("YCoordinate")
+                    b.Property<int>("RowNumber")
                         .HasColumnType("int");
 
                     b.HasKey("MoveId");
@@ -88,22 +88,22 @@ namespace Tic_Tac_Toe.Migrations
                         new
                         {
                             MoveId = 1,
+                            ColumnNumber = 0,
                             GameId = 1,
                             PlayerId = 1,
-                            XCoordinate = 0,
-                            YCoordinate = 0
+                            RowNumber = 0
                         },
                         new
                         {
                             MoveId = 2,
+                            ColumnNumber = 2,
                             GameId = 1,
                             PlayerId = 2,
-                            XCoordinate = 1,
-                            YCoordinate = 2
+                            RowNumber = 1
                         });
                 });
 
-            modelBuilder.Entity("TicTacToe.Data.Player", b =>
+            modelBuilder.Entity("Tic_Tac_Toe.Data.Player", b =>
                 {
                     b.Property<int>("PlayerId")
                         .ValueGeneratedOnAdd()
@@ -132,13 +132,13 @@ namespace Tic_Tac_Toe.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TicTacToe.Data.Game", b =>
+            modelBuilder.Entity("Tic_Tac_Toe.Data.Game", b =>
                 {
-                    b.HasOne("TicTacToe.Data.Player", "Player1")
+                    b.HasOne("Tic_Tac_Toe.Data.Player", "Player1")
                         .WithMany("Player1Games")
                         .HasForeignKey("Player1Id");
 
-                    b.HasOne("TicTacToe.Data.Player", "Player2")
+                    b.HasOne("Tic_Tac_Toe.Data.Player", "Player2")
                         .WithMany("Player2Games")
                         .HasForeignKey("Player2Id");
 
@@ -147,15 +147,15 @@ namespace Tic_Tac_Toe.Migrations
                     b.Navigation("Player2");
                 });
 
-            modelBuilder.Entity("TicTacToe.Data.Move", b =>
+            modelBuilder.Entity("Tic_Tac_Toe.Data.Move", b =>
                 {
-                    b.HasOne("TicTacToe.Data.Game", "Game")
+                    b.HasOne("Tic_Tac_Toe.Data.Game", "Game")
                         .WithMany("Moves")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TicTacToe.Data.Player", "Player")
+                    b.HasOne("Tic_Tac_Toe.Data.Player", "Player")
                         .WithMany()
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -166,12 +166,12 @@ namespace Tic_Tac_Toe.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("TicTacToe.Data.Game", b =>
+            modelBuilder.Entity("Tic_Tac_Toe.Data.Game", b =>
                 {
                     b.Navigation("Moves");
                 });
 
-            modelBuilder.Entity("TicTacToe.Data.Player", b =>
+            modelBuilder.Entity("Tic_Tac_Toe.Data.Player", b =>
                 {
                     b.Navigation("Player1Games");
 
