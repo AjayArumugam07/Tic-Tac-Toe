@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tic_Tac_Toe.Data;
 using Tic_Tac_Toe.IRepository;
+using static Tic_Tac_Toe.Repository.GameLogic;
 using Tic_Tac_Toe.Models;
 
 namespace Tic_Tac_Toe.Controllers
@@ -66,6 +67,8 @@ namespace Tic_Tac_Toe.Controllers
             await _unitOfWork.Games.Insert(game);
             await _unitOfWork.Save();
 
+            List<string> emptyBoardStringRepresentation = CreateBoardStringRepresentation(new int[3, 3]);
+
             var response = new
             {
                 game = new
@@ -81,7 +84,11 @@ namespace Tic_Tac_Toe.Controllers
                 {
                     id = player2.PlayerId,
                     name = player2.Name
-                }
+                },
+                message = "Player 1's turn",
+                row0 = emptyBoardStringRepresentation[0],
+                row1 = emptyBoardStringRepresentation[1],
+                row2 = emptyBoardStringRepresentation[2]
             };
 
             return Created("Game", response);
