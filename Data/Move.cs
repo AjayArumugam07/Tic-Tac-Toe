@@ -11,10 +11,10 @@ namespace Tic_Tac_Toe.Data
         public int MoveId { get; set; }
 
         [Required]
-        public int XCoordinate { get; set; }
+        public int RowNumber { get; set; }
 
         [Required]
-        public int YCoordinate { get; set; }
+        public int ColumnNumber { get; set; }
 
         [ForeignKey(nameof(Player))]
         public int PlayerId { get; set; }

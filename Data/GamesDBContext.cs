@@ -45,16 +45,16 @@ namespace Tic_Tac_Toe.Data
                 new Move
                 {
                     MoveId = 1,
-                    XCoordinate = 0,
-                    YCoordinate = 0,
+                    RowNumber = 0,
+                    ColumnNumber = 0,
                     PlayerId = 1,
                     GameId = 1
                 },
                 new Move
                 {
                     MoveId = 2,
-                    XCoordinate = 1,
-                    YCoordinate = 2,
+                    RowNumber = 1,
+                    ColumnNumber = 2,
                     PlayerId = 2,
                     GameId = 1
                 });
