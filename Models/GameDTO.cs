@@ -37,4 +37,17 @@ namespace Tic_Tac_Toe.Models
 
         public Player Player2 { get; set; }
     }
+
+    public class ActiveGamesDTO
+    {
+        public int GameId { get; set; }
+
+        public int Status { get; set; }
+
+        public int NumberOfMoves { get; set; }
+
+        public string Player1Name { get; set; }
+
+        public string Player2Name { get; set; }
+    }
 }

@@ -93,5 +93,17 @@ namespace Tic_Tac_Toe.Controllers
 
             return Created("Game", response);
         }
+
+        // Endpoint 3: Gets all active games and displays its players and the number of moves registered
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetActiveGames()
+        {
+            var games = await _unitOfWork.Games.GetAll(game => game.Status == (int) GameStatus.INCOMPLETE, null, new List<string> { "Player1", "Player2"});
+            var activeGames = _mapper.Map<IList<ActiveGamesDTO>>(games);
+
+            return Ok(activeGames);
+        }
     }
 }
