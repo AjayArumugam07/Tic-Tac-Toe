@@ -64,7 +64,7 @@ namespace Tic_Tac_Toe.Repository
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    if (board[i, i] == playerCell) break;
+                    if (board[i, i] != playerCell) break;
 
                     if (i == 2) return WinningPlayer;
                 }
@@ -75,7 +75,7 @@ namespace Tic_Tac_Toe.Repository
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    if (board[i, 2 - i] == playerCell) break;
+                    if (board[i, 2 - i] != playerCell) break;
 
                     if (i == 2) return WinningPlayer;
                 }
@@ -88,6 +88,25 @@ namespace Tic_Tac_Toe.Repository
             }
 
             return GameStatus.INCOMPLETE;
+        }
+
+        public static bool isPlayersTurn(Game game, Move currentMove)
+        {
+            var playerTurn = game.NumberOfMoves % 2 + 1;
+            var requestedPlayer = game.Player1Id == currentMove.PlayerId ? 1 : 2;
+            if (playerTurn == requestedPlayer)
+            {
+                return true;
+            } 
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool isGameComplete(Game game)
+        {
+            return game.Status == (int) GameStatus.INCOMPLETE ? false : true;
         }
 
         public static List<string> CreateBoardRepresentation(int[,] boardMatrix)

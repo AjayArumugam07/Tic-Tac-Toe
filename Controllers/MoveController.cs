@@ -48,6 +48,16 @@ namespace Tic_Tac_Toe.Controllers
             var game = await _unitOfWork.Games.Get(game => 
                 game.Player1Id == currentMove.PlayerId || game.Player2Id == currentMove.PlayerId);
 
+            if (isGameComplete(game))
+            {
+                return BadRequest("This game is already complete. Please create a new one");
+            }
+
+            if (!isPlayersTurn(game, currentMove))
+            {
+                return BadRequest("Wait for opponent to make a move before you play");
+            }
+
             var movesList = await _unitOfWork.Moves.GetAll(move => move.GameId == game.GameId);
 
             int[,] board = CreateBoard(movesList, game);
@@ -55,10 +65,9 @@ namespace Tic_Tac_Toe.Controllers
             bool isAlreadyOccupied = board[currentMove.RowNumber, currentMove.ColumnNumber] != 0;
             if (isAlreadyOccupied)
             {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 string responseMessage = "Cell (" + currentMove.RowNumber +
-                              ", " + currentMove.ColumnNumber + ") is already occupied. Please choose an empty cell";
-                response.Content = new StringContent(responseMessage);
+                              ", " + currentMove.ColumnNumber + ") is already occupied." +
+                              " Please choose an empty cell";
                 return BadRequest(responseMessage);
             }
 
@@ -69,42 +78,43 @@ namespace Tic_Tac_Toe.Controllers
             currentMove.GameId = game.GameId;
             await _unitOfWork.Moves.Insert(currentMove);
 
-            await _unitOfWork.Save();
+            board[currentMove.RowNumber, currentMove.ColumnNumber] =
+                    currentMove.PlayerId == game.Player1Id ? 1 : 2;
 
-            string player = currentMove.PlayerId == game.Player1Id ? "Player 1" : "Player 2";
             GameStatus gameStatus = CheckGameStatus(currentMove, game, board);
 
-            board[currentMove.RowNumber, currentMove.ColumnNumber] =
-                currentMove.PlayerId == game.Player1Id ? 1 : 2;
-
             string message = "";
+            string player = currentMove.PlayerId == game.Player1Id ? "Player 1" : "Player 2";
             switch (gameStatus)
             {
                 case GameStatus.INCOMPLETE:
                     message = player + " has registered their move";
                     break;
                 case GameStatus.DRAW:
+                    game.Status = (int) GameStatus.DRAW;
                     message = "Game is drawn!";
                     break;
                 case GameStatus.PLAYER1WON:
+                    game.Status = (int) GameStatus.PLAYER1WON;
                     message = "Player 1 has won the game!";
                     break;
                 case GameStatus.PLAYER2WON:
+                    game.Status = (int)GameStatus.PLAYER2WON;
                     message = "Player 2 has won the game!";
                     break;
             }
 
-            List<string> boardRepresentation = CreateBoardRepresentation(board);
+            await _unitOfWork.Save();
+
+            List<string> boardStringRepresentation = CreateBoardRepresentation(board);
 
             var responseObject = new
             {
                 Message = message,
-                row0 = boardRepresentation[0],
-                row1 = boardRepresentation[1],
-                row2 = boardRepresentation[2]
+                row0 = boardStringRepresentation[0],
+                row1 = boardStringRepresentation[1],
+                row2 = boardStringRepresentation[2]
             };
-
-            if(gameStatus == GameStatus.INCOMPLETE) return Created("Move", responseObject);
 
             return Created("Move", responseObject);
 
