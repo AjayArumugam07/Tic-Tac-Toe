@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -62,7 +63,15 @@ namespace Tic_Tac_Toe
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tic_Tac_Toe v1"));
             }
 
-            app.UseHttpsRedirection();
+            // Use Https Redirection is turned off temporarily
+            // in dev environment to use without SSL
+
+            // app.UseHttpsRedirection();
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseCors("AllowAll");
 
@@ -74,6 +83,8 @@ namespace Tic_Tac_Toe
             {
                 endpoints.MapControllers();
             });
+
+            PrepDB.PrepPopulation(app);
         }
     }
 }
