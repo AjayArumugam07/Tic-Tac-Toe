@@ -44,7 +44,7 @@ JSON Body:
 ```
   
 ## Success Response
-Code: 201 CREATED  
+**Code**: 201 CREATED  
 Content:
 ```
 {
@@ -67,7 +67,7 @@ Content:
 ```
   
 ## Error Response 
-Code: 400 BAD REQUEST
+**Code**: 400 BAD REQUEST
 ```
 // User tries to send request without Player 1 Name
 {
@@ -110,7 +110,7 @@ JSON Body:
 ```
   
 ## Success Response
-Code: 201 CREATED  
+**Code**: 201 CREATED  
 Content:
 ```
 {
@@ -122,7 +122,7 @@ Content:
 ```
   
 ## Error Response 
-Code: 400 BAD REQUEST
+**Code**: 400 BAD REQUEST
 ```
 // Player tries to enter a column number less than 0 or greater than 2
 {
@@ -159,7 +159,7 @@ None
 None
 
 ## Success Response
-Code: 200 OK  
+**Code**: 200 OK  
 Content: 
 ```
 [
@@ -180,5 +180,19 @@ Code: 500 INTERNAL_SERVER_ERROR
 ```
 ## Notes
 If this is the first endpoint you call, you might expect it to return an empty array as you have not created a game yet. However, for testing purposes some data is seeded into the database when the container starts up. Therefore, you will see one active game (created during seeding) in the array
+  
+# Final Question
+**Question: What is the appropriate OAuth 2/OIDC grant to use for a web application using a SPA (Single
+Page Application) and why.**
+  
+The problem with using OAuth 2 for a single-page web application is that the entire source code is available to the browser. This means that the Client Secret can not be stored securely. To mitigate this problem, we have to use a grant type called **Authorization Code Flow with Proof Key for Code Exchange (PKCE)**. This is significantly more secure as the PKCE enhanced code flow uses a secret called the Code Verifier that the Authorization server can verify. 
+  
+1. The SPA creates a transform value of the Code Verifier called the Code Challenge. 
+2. During the Authorization code request, the Code Challenge is sent along with the request to the Authorization Server. 
+3. The Authorization code is then sent back to the SPA. 
+4. The app sends a request back to the authorization server with the Authorization Code and the Code Verifier. The Authorizations server then validates the Code Verifier with the Code Challenge it got in step 2.
+5. If validation succeeds, an Access Token is sent back to the SPA, which can now be used to send requests to our company API. 
+  
+If a hacker successfully intercepts the Authorization code during step 3, they still need the Code Verifier to exchange the code for an access token.  
   
 
