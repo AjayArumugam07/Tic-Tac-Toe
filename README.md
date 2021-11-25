@@ -1,9 +1,20 @@
 # Tic-Tac-Toe
 
-# Introduction
+# Table of Contents
+1. [ Description ](#desc)
+2. [ Setup ](#setup)
+3. [ API Documentation (Read this before testing) ](#api)
+4. [ Endpoint 1 ](#end1)
+5. [ Endpoint 2 ](#end2)
+6. [ Endpoint 3 ](#end3)
+7. [ Final Question ](#final)
+
+<a name="desc"></a>
+# Description
 This app was built for the Launchpad By Vog code challenge.
 It uses .NET Web Api and a SQL DB to run a REST Server for a Tic Tac Toe games. 
 
+<a name="setup"></a>
 # Set Up
 1. Make sure you have Docker Compose downloaded on your computer.
 2. Clone the repository and cd into the project
@@ -14,13 +25,16 @@ docker-compose up
 ```
 4. The container should now be up and running. Look at the API documentation below to see what http requests you can send.
 
+<a name="api"></a>
 # API Documentation
 READ BEFORE TESTING ENDPOINTS:
 1. The server is only configured for http. Since it is only in development, it has not been configured with SSL yet.
 Therefore when sending a request to an endpoint use http://localhost:8000/<Rest-of-URL>.
-2. The SQL DB starts up with data pre seeded. Therefore, the database contains 1 game object, two player objects, and 2 move objects at the starting before any endpoints are called. This is purely for development purposes and will be removed in production.
+2. The SQL DB starts up with data pre seeded. Therefore, the database already contains 1 Game object, two Player objects, and 2 Move objects at the starting before any endpoints are called. This is purely for development purposes and will be removed in production.
 3. To easily test all endpoints, download Postman and follow the API documentation in the next section.
 
+  
+<a name="end1"></a>
 # Endpoint 1
 ## Purpose
 This endpoint allows user to create a new game
@@ -85,7 +99,8 @@ Content:
   
 ## Notes
 Make sure you note down both player IDs after getting the response back from the server. You will be using these player IDs to register moves in the 2nd endpoint.
-  
+
+<a name="end2"></a>
 # Endpoint 2
 ## Purpose
 This endpoint allows players to register a move
@@ -141,7 +156,8 @@ Content:
 // Player tries to register two moves in a row without waiting for opponent
 Wait for opponent to make a move before you play
 ```
-  
+
+<a name="end3"></a>
 # Endpoint 3
 ## Purpose
 This endpoint return a list of all the active games with their player names and the number of registered moves.
@@ -180,7 +196,8 @@ Code: 500 INTERNAL_SERVER_ERROR
 ```
 ## Notes
 If this is the first endpoint you call, you might expect it to return an empty array as you have not created a game yet. However, for testing purposes some data is seeded into the database when the container starts up. Therefore, you will see one active game (created during seeding) in the array
-  
+
+<a name="final"></a>
 # Final Question
 **Question: What is the appropriate OAuth 2/OIDC grant to use for a web application using a SPA (Single
 Page Application) and why.**
